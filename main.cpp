@@ -23,7 +23,7 @@ int main()
 {
     char o;
     int V, E, Vin, Vout;
-    int **macierzSasiedztwa;
+    int **macierzSasiedztwa = nullptr;
     bool *visited = nullptr;
     vector<vector<int>> successors;
     fstream file;
@@ -173,22 +173,36 @@ int main()
         }
         case '5':
         {
-            HcycleM(V, macierzSasiedztwa);
+            if(macierzSasiedztwa != nullptr)
+                HcycleM(V, macierzSasiedztwa);
+            else
+                cout << "Wprowadz graf przed szukaniem cyklu.\n";
             break;
         }
         case '6':
         {
-            HcycleS(V, successors);
+            if(!successors.empty())
+                HcycleS(V, successors);
+            else
+                cout << "Wprowadz graf przed szukaniem cyklu.\n";
             break;
         }
         case '7':
         {
-            undirectedEuler(macierzSasiedztwa, V);
+            //cout << "Znaleziony cykl eulera:\n";
+            if(macierzSasiedztwa != nullptr)
+                undirectedEuler(macierzSasiedztwa, V);
+            else
+                cout << "Wprowadz graf przed szukaniem cyklu.\n";
             break;
         }
         case '8':
         {
-            DirectedEuler(successors);
+            //cout << "Znaleziony cykl eulera:\n";
+            if(!successors.empty())
+                DirectedEuler(successors);
+            else
+                cout << "Wprowadz graf przed szukaniem cyklu.\n";
             break;
         }
         case 'x':
@@ -286,16 +300,21 @@ void HcycleS(int V, vector<vector<int>> successors)
             if(successors[path.back()][i] == start)
                 cycle = 1;
         }
-    }
 
-    if(cycle == 1)
-    {
-        cout << "Znaleziony cykl hamiltona:\n";
-        for(int i=0; i<path.size(); i++)
+
+        if(cycle == 1)
         {
-            cout << path[i] + 1 << ", ";
+            cout << "Znaleziony cykl hamiltona:\n";
+            for(int i=0; i<path.size(); i++)
+            {
+                cout << path[i] + 1 << ", ";
+            }
+            cout << start + 1;
         }
-        cout << start + 1;
+        else
+        {
+            cout << "Graf wejsciowy nie zawiera cyklu hamiltona.\n";
+        }
     }
     else
     {
@@ -350,6 +369,10 @@ void HcycleM(int V, int **macierzSasiedztwa)
             }
             cout << start + 1;
         }
+        else
+        {
+            cout << "Graf wejsciowy nie zawiera cyklu hamiltona.\n";
+        }
     }
     else
     {
@@ -398,6 +421,7 @@ void DirectedEuler(vector<vector<int>> successors)
 
     if(finalCircuit[0] == finalCircuit[finalCircuit.size()-1])
     {
+        cout << "Znaleziony cykl eulera:\n";
         for(int i=finalCircuit.size()-1;i>=0;i--)
         {
             cout << finalCircuit[i]+1 << ", ";
@@ -469,6 +493,7 @@ void undirectedEuler(int **macierzSasiedztwa, int V)
 
     if(finalCircuit[0] == finalCircuit[finalCircuit.size()-1])
     {
+        cout << "Znaleziony cykl eulera:\n";
         for(int i=finalCircuit.size()-1; i>=0; i--)
         {
             cout << finalCircuit[i]+1 << ", ";
